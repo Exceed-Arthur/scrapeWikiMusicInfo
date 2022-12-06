@@ -1,0 +1,1 @@
+nonsense = ["the i've", "all hi", "be roll", "the like", "my and", "you i'm", "don't of", "i'll won't", "tp-2.com", "i i'm", "the by", "the me", "gunn", "ti", "a you", "i where"]
