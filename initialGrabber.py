@@ -49,9 +49,12 @@ def buildPhrase(listOfWords):
         word = word.replace("&quot;", "").replace("(", "")
         listOfWords2.append(word)
     listOfWords = listOfWords2
-    for wordIndex in range(0, len(listOfWords)-2):
-        if listOfWords[wordIndex] == listOfWords[wordIndex+1]:
-            del listOfWords[wordIndex]
+    for wordIndex in range(0, len(listOfWords)-1):
+        try:
+            if listOfWords[wordIndex] == listOfWords[wordIndex+1]:
+                del listOfWords[wordIndex]
+        except:
+            pass
     # print(listOfWords)
     for wordIndex in range(0, len(listOfWords)):
         if wordIndex == len(listOfWords) - 1:
@@ -313,7 +316,7 @@ displayKeyWordAvgs()
 driver.quit()
 
 for choice in ["Album", "Song"]:
-    for i in range(200):
+    for i in range(2300):
         # noinspection PyRedeclaration
         builtPhrase = ""
         firstPhrase = ""
