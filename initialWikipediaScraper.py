@@ -3,6 +3,7 @@ import exceedLib
 from removeDuplicates import removeDuplicateString
 from selenium import webdriver
 import chromedriver_autoinstaller
+
 chromedriver_autoinstaller.install()
 
 
@@ -74,8 +75,9 @@ def getAllKeywords():
                                 artists.append(string)
     driver.quit()
     keywords_____ = exceedLib.finalPhraseFilter(keywords_____)
-    dictated = dict(albums = albums, artists = artists, songs = songs)
+    dictated = dict(albums=albums, artists=artists, songs=songs)
     return keywords_____, dictated
+
 
 def getAllAlbums():
     driver = webdriver.Chrome()
@@ -106,7 +108,6 @@ def getAllAlbums():
                         isArtist, isSong, isAlbum = False, False, False
                         for albumTerm in ["soundtrack", "album"]:
                             if albumTerm in source___.lower():
-                                print(f"Album Source: {source___}")
                                 isAlbum = True
 
                         string = source___
@@ -117,11 +118,15 @@ def getAllAlbums():
                                 isArtist = True
                             else:
                                 isSong = True
-                            if isArtist:
-                                print(f"Artist Source: {string}")
                         string = exceedLib.removeParenthetical(string)
+                        if isAlbum:
+                            typed = "Album"
+                        elif isArtist:
+                            typed = "Artist"
+                        else:
+                            typed = "Song"
                         if string:
-                            print(f"Formatted String: {string}")
+                            print(f"Formatted {typed}: {string}")
                             string = string.replace("&amp;", "&").replace("_", " ")
                             if string not in keywords_____:
                                 keywords_____.append(string)
@@ -136,8 +141,9 @@ def getAllAlbums():
                                 artists.append(string)
     driver.quit()
     keywords_____ = exceedLib.finalPhraseFilter(keywords_____)
-    dictated = dict(albums = albums, artists = artists, songs = songs)
+    dictated = dict(albums=albums, artists=artists, songs=songs)
     return keywords_____, dictated
+
 
 def getAllOriginalWorkTitles():
     keywordsByYear = getAllKeywords()
@@ -154,7 +160,7 @@ def countCharacter(char: str, string: str):
 
 def removeDuplicates(string: str):
     if len(string) > 1:
-        for outerCharIndex in range(len(string)-1):
+        for outerCharIndex in range(len(string) - 1):
             for innerCharIndex in range(1, len(string)):
                 stringSmaller = string[outerCharIndex:innerCharIndex]
                 if stringSmaller in string[innerCharIndex:]:
@@ -163,7 +169,6 @@ def removeDuplicates(string: str):
     return string
 
 
-#print(removeDuplicates('"Lauren Alaina">Lauren Alaina</a>'))
-
+# print(removeDuplicates('"Lauren Alaina">Lauren Alaina</a>'))
 print(getAllAlbums())
 print(getAllOriginalWorkTitles())

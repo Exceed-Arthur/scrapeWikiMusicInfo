@@ -99,5 +99,5 @@ def finalPhraseFilter(list_: list):
     for item in list_:
         if "<a class" in item.lower():
             list_.remove(item)
-            print(item, "remove ")
+            print(f"\nREMOVED: {item}")
     return list_
