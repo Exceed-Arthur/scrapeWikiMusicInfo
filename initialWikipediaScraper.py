@@ -17,9 +17,9 @@ def normalizeStringChars(string: str):
 
 
 def getAllKeywords():
-
     driver = webdriver.Chrome()
     keywords_____ = []
+    albums, songs, artists = [], [], []
     for year in range(2022, 1945, -1):
         urlForData = ""
         if year > 1957:
@@ -40,6 +40,7 @@ def getAllKeywords():
                 if "</a>" in source___ and (len(source___) < 50):
                     print()
                     print(f"Source: {source___}")
+                    source___ = source___.replace("&amp;", "&").replace("&amp;", "&")
                     isArtist, isSong, isAlbum = False, False, False
                     if "album" in source___.lower():
                         print(f"Album Source: {source___}")
@@ -51,6 +52,7 @@ def getAllKeywords():
                     if not isAlbum:
                         if wikiLib.isName(string):
                             isArtist = True
+
                         else:
                             isSong = True
                         if isArtist:
@@ -63,20 +65,83 @@ def getAllKeywords():
                             keywords_____.append(string)
                             if isAlbum:
                                 print(f"Album: {string}")
+                                albums.append(string)
                             elif isSong:
                                 print(f"Song: {string}")
+                                songs.append(string)
                             elif isArtist:
                                 print(f"Artist: {string}")
+                                artists.append(string)
     driver.quit()
     keywords_____ = exceedLib.finalPhraseFilter(keywords_____)
-    return keywords_____
+    dictated = dict(albums = albums, artists = artists, songs = songs)
+    return keywords_____, dictated
 
+def getAllAlbums():
+    driver = webdriver.Chrome()
+    keywords_____ = []
+    albums, songs, artists = [], [], []
+    for year in range(2022, 1945, -1):
+        urlForData = ""
+        if year > 1957:
+            urlForData = f"https://en.wikipedia.org/wiki/List_of_Billboard_200_number-one_albums_of_{year}"
+        elif year > 1955:
+            urlForData = f"https://en.wikipedia.org/wiki/List_of_Billboard_number-one_albums_of_{year}"
+        elif year > 1948:
+            urlForData = f"https://en.wikipedia.org/wiki/List_of_Billboard_number-one_albums_of_{year}"
+        elif year > 1939:
+            urlForData = f"https://en.wikipedia.org/wiki/List_of_Billboard_Best-Selling_Popular_Record_Albums_number_ones_of_{year}"
+        driver.get(urlForData)
+        source = driver.page_source.split("title=")
+        for source_ in source:
+            source__ = source_.split("\n")
+            source__ = exceedLib.filterByPhraseModel(source__)
+            source__ = exceedLib.finalPhraseFilter(source__)
+            for source___ in source__:
+                if "Records" not in source___:
+                    if "</a>" in source___ and (len(source___) < 50):
+                        print()
+                        print(f"Source: {source___}")
+                        source___ = source___.replace("&amp;", "&").replace("&amp;", "&")
+                        isArtist, isSong, isAlbum = False, False, False
+                        for albumTerm in ["soundtrack", "album"]:
+                            if albumTerm in source___.lower():
+                                print(f"Album Source: {source___}")
+                                isAlbum = True
+
+                        string = source___
+                        string = exceedLib.filterTags(string)
+                        string = exceedLib.removeDuplicateString(string)
+                        if not isAlbum:
+                            if wikiLib.isName(string):
+                                isArtist = True
+                            else:
+                                isSong = True
+                            if isArtist:
+                                print(f"Artist Source: {string}")
+                        string = exceedLib.removeParenthetical(string)
+                        if string:
+                            print(f"Formatted String: {string}")
+                            string = string.replace("&amp;", "&").replace("_", " ")
+                            if string not in keywords_____:
+                                keywords_____.append(string)
+                            if isAlbum:
+                                print(f"Album: {string}")
+                                albums.append(string)
+                            elif isSong:
+                                print(f"Song: {string}")
+                                songs.append(string)
+                            elif isArtist:
+                                print(f"Artist: {string}")
+                                artists.append(string)
+    driver.quit()
+    keywords_____ = exceedLib.finalPhraseFilter(keywords_____)
+    dictated = dict(albums = albums, artists = artists, songs = songs)
+    return keywords_____, dictated
 
 def getAllOriginalWorkTitles():
     keywordsByYear = getAllKeywords()
     print(keywordsByYear)
-
-
 
 
 def countCharacter(char: str, string: str):
@@ -100,5 +165,5 @@ def removeDuplicates(string: str):
 
 #print(removeDuplicates('"Lauren Alaina">Lauren Alaina</a>'))
 
-
+print(getAllAlbums())
 print(getAllOriginalWorkTitles())
