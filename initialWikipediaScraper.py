@@ -44,20 +44,18 @@ def getAllKeywords():
                     if "album" in source___.lower():
                         print(f"Album Source: {source___}")
                         isAlbum = True
-                    elif "song" in source___.lower():
-                        print(f"Song Source: {source___}")
-                        isSong = True
-                    elif not (isAlbum or isSong):
-                        if wikiLib.isName(source___):
-                            isArtist = True
-                        else:
-                            isSong = True
-                        if isArtist:
-                            print(f"Artist Source: {source___}")
 
                     string = exceedLib.filterTags(source___)
                     string = removeDuplicateString(string)
                     string = exceedLib.removeParenthetical(string)
+                    if not isAlbum:
+                        if wikiLib.isName(string):
+                            isArtist = True
+                        else:
+                            isSong = True
+                        if isArtist:
+                            print(f"Artist Source: {string}")
+
                     if string:
                         print(f"Formatted String: {string}")
                         string = string.replace("&amp;", "&").replace("_", " ")
