@@ -74,6 +74,15 @@ def getIndex(string: str, target: str, occur: int):
                 return count
 
 
+def splitByWords(string:str):
+    words = []
+    if " " in string:
+        for word in string.split(" "):
+            words.append(word)
+        return words
+    return [string]
+
+
 # Algorithm: Remove Any Word Contained Inside Parenthesis
 def removeParenthetical(string: str):
     parenthetical = ""
@@ -101,3 +110,4 @@ def finalPhraseFilter(list_: list):
             list_.remove(item)
             print(f"\nREMOVED: {item}")
     return list_
+
