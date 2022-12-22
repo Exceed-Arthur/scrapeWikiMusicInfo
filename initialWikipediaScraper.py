@@ -100,8 +100,8 @@ def getAllKeywords():
             print(f"Data: {data}")
             keys_ = exceedLib.splitByWords(data)
             for key_ in keys_:
+                typed[1].append(key_)  # albums=[albums]  select item  in nested array
                 print()
-                typed[1].append(key_)  # albums=[albums]  select item in nested array
     # Below lines add all key words to dictionary of tags
 
     for typed in [(albumKeyWords, albumTagSequences), (songKeyWords, songTagSequences),
