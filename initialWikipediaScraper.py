@@ -5,6 +5,8 @@ from removeDuplicates import removeDuplicateString
 from selenium import webdriver
 import textblob
 import exceedCloud
+import string as String
+
 
 import chromedriver_autoinstaller
 
@@ -31,7 +33,7 @@ def getAllKeywords():
     driver = webdriver.Chrome()
     keywords_____ = []
     albums, songs, artists = [], [], []
-    for year in range(2022, 2019, -1):
+    for year in range(2022, 1945, -1):
         urlForData = ""
         if year > 1957:
             urlForData = f"https://en.wikipedia.org/wiki/Billboard_Year-End_Hot_100_singles_of_{year}"
@@ -107,18 +109,20 @@ def getAllKeywords():
     for typed in [(albumKeyWords, albumTagSequences), (songKeyWords, songTagSequences),
                   (artistKeyWords, artistTagSequences)]:
         for kw in typed[0]:
-            blobTag = textblob.TextBlob(kw).tags[0][1]
-            blobWord = textblob.TextBlob(kw).tags[0][0]
-            wordTagIndex.update({blobWord: blobTag})
             try:
-                tagWordsIndex[blobTag].append(blobWord)
-            except KeyError:
-                tagWordsIndex.update({blobTag: [blobWord]})
-
+                blobTag = textblob.TextBlob(kw).tags[0][1]
+                blobWord = textblob.TextBlob(kw).tags[0][0]
+                wordTagIndex.update({blobWord: blobTag})
+                try:
+                    tagWordsIndex[blobTag].append(blobWord)
+                except KeyError:
+                    tagWordsIndex.update({blobTag: [blobWord]})
+            except IndexError:
+                print(f"Index error on {kw}")
     driver = webdriver.Chrome()
 
     albums = []
-    for year in range(2022, 2019, -1):
+    for year in range(2022, 1945, -1):
         urlForData = ""
         if year > 1957:
             urlForData = f"https://en.wikipedia.org/wiki/List_of_Billboard_200_number-one_albums_of_{year}"
@@ -174,14 +178,14 @@ def getAllKeywords():
     # To Do: For each category, songs, albums, artists
     for typed in [("album", albumTagSequences, albumKeyWords), ("song", songTagSequences, songKeyWords),
                   ("artist", artistTagSequences, artistTagSequences)]:
-        for i in range(10):
+        for i in range(999):
             mediaType = typed[0]
             tagSequences = typed[1]
             print(f"Media type: {mediaType}")
             for tagSequence in tagSequences:
                 wordArray = []  # Contains words that we will build into phrase
                 for tag in tagSequence:
-                    print(f"Searching for word of category: {tag}")
+                    print(f"\nSearching for word of category: {tag}")
                     word = random.choice(keywords_____["keywords"])
                     try:
                         word = random.choice(tagWordsIndex[tag])
@@ -190,8 +194,10 @@ def getAllKeywords():
                     wordArray.append(word)
                     print(f"Found word: {word} for tag: {tag}")
                 builtTitle = exceedLib.buildPhrase(wordArray)
-                print(f"Built {builtTitle} as {mediaType} from sequence {tagSequence}")
-                exceedCloud.addTitleToMusicDB(category=mediaType, title=builtTitle)
+                builtTitle = String.capwords(builtTitle)
+                if not builtTitle.lower().startswith("featuring"):
+                    print(f"Built {builtTitle} as {mediaType} from sequence {tagSequence}")
+                    exceedCloud.addTitleToMusicDB(category=mediaType, title=builtTitle, year=year)
     return dictToReturn
 
 

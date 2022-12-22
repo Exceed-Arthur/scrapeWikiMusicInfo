@@ -4,7 +4,7 @@ import cred
 from boto3.dynamodb.conditions import Key
 
 
-def addTitleToMusicDB(category: str, title: str):
+def addTitleToMusicDB(category: str, title: str, year: str):
     if len(title) > 1:
         dynamodb = boto3.resource('dynamodb',
                                   aws_access_key_id=cred.AWSAccessKeyId,
@@ -16,7 +16,8 @@ def addTitleToMusicDB(category: str, title: str):
                 Item={
                     'id': random.randrange(1111111, 9999999),
                     'category': category,
-                    'title': title
+                    'title': title,
+                    'year': year
                 }
             )
             return response
