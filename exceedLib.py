@@ -111,3 +111,10 @@ def finalPhraseFilter(list_: list):
             print(f"\nREMOVED: {item}")
     return list_
 
+
+def buildPhrase(list_: list):
+    newPhrase = ""
+    for item in list_:
+        newPhrase += item + " "
+    if newPhrase:
+        return newPhrase.lstrip().rstrip()

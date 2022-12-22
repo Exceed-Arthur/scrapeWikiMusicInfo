@@ -1,14 +1,18 @@
 import wikiLib
 import exceedLib
+import random
 from removeDuplicates import removeDuplicateString
 from selenium import webdriver
 import textblob
+import exceedCloud
 
 import chromedriver_autoinstaller
 
 chromedriver_autoinstaller.install()
 
-dictionary = dict(CC=[], CD=[], DT=[], EX=[], IN=[], JJ=[], JJR=[], JJS=[], LS=[], MD=[], NN=[], NNP=[], NNS=[], PDT=[], POS=[], PRP=[], RB=[], RBR=[], TO=[], UH=[], VB=[], VBN=[], WP=[], VBD=[], VBP=[], VBZ=[], WRB=[], WDT=[])
+dictionary = dict(CC=[], CD=[], DT=[], EX=[], IN=[], JJ=[], JJR=[], JJS=[], LS=[], MD=[], NN=[], NNP=[], NNS=[], PDT=[],
+                  POS=[], PRP=[], RB=[], RBR=[], TO=[], UH=[], VB=[], VBN=[], WP=[], VBD=[], VBP=[], VBZ=[], WRB=[],
+                  WDT=[])
 wordTagIndex = {}
 tagWordsIndex = {}
 
@@ -95,17 +99,17 @@ def getAllKeywords():
             for key_ in keys_:
                 print(f"Typed: {typed}")
                 print(f"Data: {data}")
-
                 print(f"Keys: {keys_}")
                 print()
-                typed[1].append(key_)   # albums=[albums]  select item in nested array
+                typed[1].append(key_)  # albums=[albums]  select item in nested array
     # Below lines add all key words to dictionary of tags
 
-    for typed in [(albumKeyWords, albumTagSequences), (songKeyWords, songTagSequences), (artistKeyWords, artistTagSequences)]:
+    for typed in [(albumKeyWords, albumTagSequences), (songKeyWords, songTagSequences),
+                  (artistKeyWords, artistTagSequences)]:
         for kw in typed[0]:
             blobTag = textblob.TextBlob(kw).tags[0][1]
             blobWord = textblob.TextBlob(kw).tags[0][0]
-            wordTagIndex.update({blobWord:blobTag})
+            wordTagIndex.update({blobWord: blobTag})
             try:
                 tagWordsIndex[blobTag].append(blobWord)
             except KeyError:
@@ -153,19 +157,41 @@ def getAllKeywords():
                                 albums.append(string)
     for typed in [(albums, albumTagSequences), (songs, songTagSequences), (artists, artistTagSequences)]:
         for compoundPhrase in typed[0]:
-            tagSequence = ""
+            tagSequence = []
             blobTags = textblob.TextBlob(compoundPhrase).tags
             print(f"Blob: {blobTags}")
             for tagPair in blobTags:
-                tagSequence += tagPair[1]
+                tagSequence.append(tagPair[1])
             typed[1].append(tagSequence)
 
     driver.quit()
     keywords_____ = {"keywords": artistKeyWords + songKeyWords + albumKeyWords}
     dictToReturn = {}
     dictToReturn.update(keywords_____)
-    dictToReturn.update({"tagWordsIndex": tagWordsIndex, "wordTagIndex": wordTagIndex, "albumTagSequences": albumTagSequences, "songTagSequences": songTagSequences, "artistTagSequences": artistTagSequences})
+    dictToReturn.update(
+        {"tagWordsIndex": tagWordsIndex, "wordTagIndex": wordTagIndex, "albumTagSequences": albumTagSequences,
+         "songTagSequences": songTagSequences, "artistTagSequences": artistTagSequences})
 
+    # To Do: For each category, songs, albums, artists
+    for typed in [("album", albumTagSequences, albumKeyWords), ("song", songTagSequences, songKeyWords),
+                  ("artist", artistTagSequences, artistTagSequences)]:
+        for i in range(10):
+            mediaType = typed[0]
+            tagSequences = typed[1]
+            print(f"Media type: {mediaType}")
+            for tagSequence in tagSequences:
+                wordArray = []  # Contains words that we will build into phrase
+                for tag in tagSequence:
+                    print(f"Searching for word of category: {tag}")
+                    word = random.choice(keywords_____["keywords"])
+                    try:
+                        word = random.choice(tagWordsIndex[tag])
+                    except:
+                        print(f"Failed to find word for {tag}")
+                    wordArray.append(word)
+                    print(f"Found word: {word} for tag: {tag}")
+                builtTitle = exceedLib.buildPhrase(wordArray)
+                exceedCloud.addTitleToMusicDB(category=mediaType, title=builtTitle)
     return dictToReturn
 
 
@@ -193,6 +219,4 @@ def removeDuplicates(string: str):
     return string
 
 
-# print(removeDuplicates('"Lauren Alaina">Lauren Alaina</a>'))
-# print(getAllAlbums())
 getAllOriginalWorkTitles()
