@@ -110,6 +110,7 @@ def getAllKeywords():
                 tagWordsIndex[blobTag].append(blobWord)
             except KeyError:
                 tagWordsIndex.update({blobTag: [blobWord]})
+
     driver = webdriver.Chrome()
 
     albums = []
@@ -150,11 +151,21 @@ def getAllKeywords():
                             if isAlbum:
                                 print(f"Album: {string}")
                                 albums.append(string)
+    for typed in [(albums, albumTagSequences), (songs, songTagSequences), (artists, artistTagSequences)]:
+        for compoundPhrase in typed[0]:
+            tagSequence = ""
+            blobTags = textblob.TextBlob(compoundPhrase).tags
+            print(f"Blob: {blobTags}")
+            for tagPair in blobTags:
+                tagSequence += tagPair[1]
+            typed[1].append(tagSequence)
+
     driver.quit()
     keywords_____ = {"keywords": artistKeyWords + songKeyWords + albumKeyWords}
     dictToReturn = {}
     dictToReturn.update(keywords_____)
-    dictToReturn.update({"tagWordsIndex": tagWordsIndex, "wordTagIndex": wordTagIndex})
+    dictToReturn.update({"tagWordsIndex": tagWordsIndex, "wordTagIndex": wordTagIndex, "albumTagSequences": albumTagSequences, "songTagSequences": songTagSequences, "artistTagSequences": artistTagSequences})
+
     return dictToReturn
 
 
