@@ -95,13 +95,11 @@ def getAllKeywords():
 
     # Below lines add all key words for each type into keyword array for that type
     for typed in [(albums, albumKeyWords), (songs, songKeyWords), (artists, artistKeyWords)]:
-
+        print(f"Typed: {typed}")
         for data in typed[0]:
+            print(f"Data: {data}")
             keys_ = exceedLib.splitByWords(data)
             for key_ in keys_:
-                print(f"Typed: {typed}")
-                print(f"Data: {data}")
-                print(f"Keys: {keys_}")
                 print()
                 typed[1].append(key_)  # albums=[albums]  select item in nested array
     # Below lines add all key words to dictionary of tags
