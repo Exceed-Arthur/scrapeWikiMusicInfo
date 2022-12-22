@@ -159,7 +159,6 @@ def getAllKeywords():
         for compoundPhrase in typed[0]:
             tagSequence = []
             blobTags = textblob.TextBlob(compoundPhrase).tags
-            print(f"Blob: {blobTags}")
             for tagPair in blobTags:
                 tagSequence.append(tagPair[1])
             typed[1].append(tagSequence)
@@ -191,6 +190,7 @@ def getAllKeywords():
                     wordArray.append(word)
                     print(f"Found word: {word} for tag: {tag}")
                 builtTitle = exceedLib.buildPhrase(wordArray)
+                print(f"Built {builtTitle} as {mediaType} from sequence {tagSequence}")
                 exceedCloud.addTitleToMusicDB(category=mediaType, title=builtTitle)
     return dictToReturn
 
