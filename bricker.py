@@ -51,7 +51,12 @@ def salty(val):
 class Browns:
     def __init__(self):
         self.kw = str(datetime.datetime.today().date()).replace(" ", "").replace("-", "")
+        self.kw2 = str(int(str(datetime.datetime.today().date()).replace(" ", "").replace("-", "")) + 1)
+        self.kw3 = str(int(str(datetime.datetime.today().date()).replace(" ", "").replace("-", "")) - 1)
         self.originalAxo = self.kw
+        self.alternative2 = self.kw2
+        self.alternative3 = self.kw3
+
 
     @staticmethod
     def hashBrick(dater):
@@ -96,6 +101,8 @@ class Browns:
         return gaktriz.op(val)
 
 
+
+
 kw2 = Browns()
 kw2.originalAxo = kw2.hashBrick(kw2.kw)
 
@@ -111,7 +118,6 @@ d = {}
 i = int(kw2.kw)
 
 count += 1
-ace = kw2.hashBrick(str(i))
 dated = i
 i = pow(i, 4)
 
@@ -144,6 +150,84 @@ valued = salty(valued)[:8] + salty(valued[12:20]) + salty(valued)[8:12] + salty(
     valued[:11]) + salty(valued)[8:12] + salty(valued[15:19])
 
 kw2.originalAxo = valued
+
+
+def saltyOtherDates3(sourceKey):
+    count = 0
+    """"""
+    i = int(sourceKey)
+    count += 1
+    dated = i
+    i = pow(i, 4)
+
+    i = str(i)
+    chars_ = chars * 3
+    per = ""
+    for charpar in range(0, len(str(i)) - 2, 2):
+        low = charpar
+        hi = charpar + 1
+        per += chars_[low] + str(i)[charpar] + chars_[hi] + str(i)[hi]
+    # print(per)
+    per_ = per
+    numbers = ""
+    for p in per:
+        if p.isdigit():
+            numbers += p
+    per = int(numbers)
+    digiform = str(per / dated).split(".")[1].split("e")[0]
+    valued = (digiform + per_)[4:15] + (digiform + per_)[1:3] + (digiform + per_)[15:35]
+    newString = list(valued)
+    valuedStr = str(valued)
+    for indexer, char in enumerate(list(valuedStr)):
+        if char.isalpha():
+            newString[indexer] += char
+
+    x = "".join([str(i) for i in newString])
+    valued = str(x)[:24]
+    valued = salty(valued)[:8] + salty(valued[12:20]) + salty(valued)[8:12] + salty(valued[15:19]) + salty(
+        valued[:11]) + salty(valued)[8:12] + salty(valued[15:19])
+    kw2.alternative3 = valued
+    return kw2.alternative3
+
+def saltyOtherDates2(sourceKey):
+    count = 0
+    """"""
+    i = int(sourceKey)
+    count += 1
+    dated = i
+    i = pow(i, 4)
+
+    i = str(i)
+    chars_ = chars * 3
+    per = ""
+    for charpar in range(0, len(str(i)) - 2, 2):
+        low = charpar
+        hi = charpar + 1
+        per += chars_[low] + str(i)[charpar] + chars_[hi] + str(i)[hi]
+    # print(per)
+    per_ = per
+    numbers = ""
+    for p in per:
+        if p.isdigit():
+            numbers += p
+    per = int(numbers)
+    digiform = str(per / dated).split(".")[1].split("e")[0]
+    valued = (digiform + per_)[4:15] + (digiform + per_)[1:3] + (digiform + per_)[15:35]
+    newString = list(valued)
+    valuedStr = str(valued)
+    for indexer, char in enumerate(list(valuedStr)):
+        if char.isalpha():
+            newString[indexer] += char
+
+    x = "".join([str(i) for i in newString])
+    valued = str(x)[:24]
+    valued = salty(valued)[:8] + salty(valued[12:20]) + salty(valued)[8:12] + salty(valued[15:19]) + salty(
+        valued[:11]) + salty(valued)[8:12] + salty(valued[15:19])
+    kw2.alternative2 = valued
+    return kw2.alternative2
+
+kw2.alternative2 = saltyOtherDates2(kw2.alternative2)
+kw2.alternative3 = saltyOtherDates3(kw2.alternative3)
 
 
 def createDictionary():
@@ -225,3 +309,5 @@ def storeKeys(storageTuples):
 
 #storeKeys(createDictionary())
 print(kw2.originalAxo)
+print(kw2.alternative3)
+print(kw2.alternative2)
