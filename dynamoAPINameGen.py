@@ -1,3 +1,5 @@
+from random import randrange
+
 from periphServerFuncs import *
 
 
@@ -8,7 +10,7 @@ def getMediaNameIdea(mediaType=None, words=None, length=None, iterations=0):
         print(iterations)
         response = table.get_item(
             Key={
-                'id': random.randrange(1111111, 9999999, 1),
+                'id': randrange(1111111, 9999999, 1),
             })["Item"]
         print(response)
         if mediaType or words or length:

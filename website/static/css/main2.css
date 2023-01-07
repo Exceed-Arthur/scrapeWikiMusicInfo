@@ -2,9 +2,7 @@ head {
     foreground-color: white;
     }
 
-body {
-    background-image: linear-gradient( 135deg, #F05F57 10%, #360940 100%);
-    }
+
 body > div > h1 {
     padding: 72px;
     color: #FFFACD;
@@ -160,10 +158,8 @@ html {
     font-family: sans-serif;
     color: black;
   }
-* {
-    font-family: sans-serif;
-    color: black;
-  }
+
+
 
 body > div > form > h3 {
     font-family: sans-serrif;
@@ -181,7 +177,7 @@ body > div > form > h4 {
 form button {
   position: relative;
   display: inline-block;
-  color: #03e9f4;
+  color: linear-gradient(90deg, transparent, #03e9f4)
   font-size: 16px;
   text-decoration: none;
   text-transform: uppercase;
@@ -194,10 +190,7 @@ button:hover {
   background: #03e9f4;
   color: #fff;
   border-radius: 5px;
-  box-shadow: 0 0 5px #03e9f4,
-              0 0 25px #03e9f4,
-              0 0 50px #03e9f4,
-              0 0 100px #03e9f4;
+
 }
 
 button span {
@@ -274,8 +267,15 @@ button span:(4) {
     }
 
 body {
-    background-image: linear-gradient( 135deg, #F05F57 10%, #360940 100%);
+    background-image: url("https://www.itoven-ai.co/images/jukebox.jpg");
+    background-repeat: no-repeat, repeat;
+    background-size: 1300px 1300px;
+    min-height: 1200px;
+    max-height:1200px;
+    min-width: 1200px;
+    max-width: 1200px;
     }
+
 body > div > h1 {
     padding: 72px;
     color: #FFFACD;
@@ -292,8 +292,10 @@ body > div > h1 {
     top: 50%;
     left: 50%;
     padding: 16px;
+    /*
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    */
 }
 
 body > div > div > form > button:nth-child(1) {
@@ -368,14 +370,13 @@ body > div.container > p > img {
 body > div > button:nth-child(6) {
     font-size: 35px;
     border-radius: 16px;
-    background-color: #770737;
     border: none;
     padding: 14px 107px 14px 107px;
     color: #FFFACD;
     position: absolute;
     left: 25%;
     right: 25%;
-
+    background-image: url("https://m.media-amazon.com/images/I/81M6Qg1x0XL._AC_SL1500_.jpg");
 }
 
 body > div > button:nth-child(10) {
@@ -431,10 +432,7 @@ html {
     font-family: sans-serif;
     color: black;
   }
-* {
-    font-family: sans-serif;
-    color: black;
-  }
+
 
 body > div > form > h3 {
     font-family: sans-serrif;
@@ -452,7 +450,7 @@ body > div > form > h4 {
 form button {
   position: relative;
   display: inline-block;
-  color: #03e9f4;
+  color: linear-gradient(to right, rgb(15, 32, 39), rgb(32, 58, 67), rgb(44, 83, 100));
   font-size: 16px;
   text-decoration: none;
   text-transform: uppercase;
@@ -570,3 +568,23 @@ body > div.container > div > form > button.btn.btn-primary {
     width: 40%;
     height: 70%;
     }
+
+.semicircle {
+    /*
+    position: absolute;
+    */
+    padding-left: 10rem;
+    transform: translate(20%, -50%);
+    height: 150px;
+    width: 293px;
+    border-radius: 0 0 150px 150px;
+    background: linear-gradient(to right, rgb(173, 169, 150), rgb(242, 242, 242), rgb(219, 219, 219), rgb(234, 234, 234));
+}
+
+#MainContainer {
+    padding-left: 15.1rem;
+    max-width: 500px;
+    min-width: 500px;
+    max-height: 500px;
+    min-height: 500px;
+}

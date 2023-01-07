@@ -46,5 +46,3 @@ def hashBrick(var: str):
             if len(st) > 25:
                 return st[-25:]
             return st
-
-

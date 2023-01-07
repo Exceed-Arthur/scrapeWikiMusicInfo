@@ -4,6 +4,8 @@ import boto3
 import cred
 from boto3.dynamodb.conditions import Key
 
+import email_funcs
+
 root_directory = os.path.abspath(os.curdir)
 
 session = boto3.Session(
@@ -81,6 +83,7 @@ def remove_file_from_favorites_DB(username: str, file_name: str):
     except:
         pass
 
+
 def reset_user_favorites_DB(username: str):
     try:
         table = dynamodb.Table('itoven_nottauserbase')
@@ -107,6 +110,7 @@ def reset_user_favorites_DB(username: str):
     except:
         pass
 
+
 def get_favorites_list_user(username: str):
     try:
         table = dynamodb.Table('itoven_nottauserbase')
@@ -131,6 +135,7 @@ def get_favorites_list_user(username: str):
         return u_favorites
     except:
         return ['test']
+
 
 
 def increase_user_credit_count(username: str, credits_to_add: int):
@@ -160,6 +165,58 @@ def increase_user_credit_count(username: str, credits_to_add: int):
     except:
         return False
 
+
+
+
+def getSavedMusicNamingIdeas(username: str, mediaType="song"):
+    try:
+        table = dynamodb.Table('music-naming-tool')
+        username = username
+        response = table.query(
+            IndexName='Username_Index',
+            KeyConditionExpression=Key('Username').eq(username)
+        )["Items"][0][mediaType][0]
+        print(f"Retrieved {mediaType} ideas saved: {response} from {username}'s account")
+        return response
+    except:
+        print(f"ERROR: Failed to retrieve {mediaType} list for {username}'s account.")
+    return []
+
+def addMusicNamingIdea(username: str, ideaTitle: str, mediaType="song"):
+
+    table = dynamodb.Table('music-naming-tool')
+    username = username
+    response = table.query(
+        IndexName='Username_Index',
+        KeyConditionExpression=Key('Username').eq(username)
+    )
+    u_id = response.get("Items")[0].get('User ID')
+    u_name = response.get("Items")[0].get('Username')
+    originalList = getSavedMusicNamingIdeas(username=username, mediaType=mediaType)
+    print(originalList)
+    originalList = set(list(originalList))
+    originalList.add(ideaTitle)
+    originalList = list(originalList)
+    originalList.sort()
+    print(originalList)
+    response = table.update_item(
+        Key={
+            'User ID': u_id,
+            'Username': u_name
+        },
+        UpdateExpression=f"set {mediaType} = :mL",
+        ExpressionAttributeValues={
+            ':mL': originalList
+        },
+        ReturnValues="UPDATED_NEW"
+    )
+    print(f"Added {ideaTitle} for {mediaType} in {username}'s account")
+    return response
+
+
+getSavedMusicNamingIdeas("arthur")
+addMusicNamingIdea(username="arthur", ideaTitle="Wristocrat Test", mediaType="artist")
+getSavedMusicNamingIdeas("arthur")
 
 def decrease_user_credit_count(username: str, credits_to_deduct: int):
     table = dynamodb.Table('itoven_nottauserbase')
@@ -404,3 +461,23 @@ def getDownloadsFolder():
         return os.path.join(home, "Downloads")
 
 
+def getUsernames():
+    usernames = []
+    table = dynamodb.Table('itoven_nottauserbase')
+    allItems = table.scan()
+    userObjectArray = allItems['Items']
+    for userObject in userObjectArray:
+        usernames.append(userObject["Username"])
+    print("Successfully fetched usernames.")
+    return usernames
+
+
+def announceUpdates():
+
+    #email_funcs.itoven_send_html_verification(to="arthurlee99087@gmail.com", subject="Your iToven AI code is here!", code=12462)
+    for user in getUsernames():
+        #print(user)
+        email_funcs.itoven_send_html_update_announcement(to=user, subject="Free credits + The app updates you wanted!")
+        time.sleep(20)
+
+#announceUpdates()

@@ -321,10 +321,6 @@ def get_user_credit_count(username: str):
 def get_platypus(username: str):
     try:
         username = lower(username)
-        session = boto3.Session(
-            aws_access_key_id=cred.AWSAccessKeyId,
-            aws_secret_access_key=cred.AWSSecretKey,
-            region_name="us-east-2")
         dynamodb = boto3.resource('dynamodb',
                                   aws_access_key_id=cred.AWSAccessKeyId,
                                   aws_secret_access_key=cred.AWSSecretKey,
@@ -336,36 +332,32 @@ def get_platypus(username: str):
             KeyConditionExpression=Key('Username').eq(username)
         )
         platypus = response.get("Items")[0].get('Platypus')
+        return platypus
     except:
-        print("Failed")
+        print(f"Failed to get password for {username}")
 
 
 def user_exists(username: str):
-    try:
-        username = lower(username)
-        session = boto3.Session(
-            aws_access_key_id=cred.AWSAccessKeyId,
-            aws_secret_access_key=cred.AWSSecretKey,
-            region_name="us-east-2")
-        dynamodb = boto3.resource('dynamodb',
-                                  aws_access_key_id=cred.AWSAccessKeyId,
-                                  aws_secret_access_key=cred.AWSSecretKey,
-                                  region_name="us-east-2")
-        table = dynamodb.Table(iTovenUserTable)
-        username = username.lower()
-        try:
-            response = table.query(
-                IndexName='Username_Index',
-                KeyConditionExpression=Key('Username').eq(username))
-            if "@" and "." in response:
-                return True
-            else:
-                return False
-        except:
-            return False
-    except:
+
+    username = lower(username)
+    dynamodb = boto3.resource('dynamodb',
+                              aws_access_key_id=cred.AWSAccessKeyId,
+                              aws_secret_access_key=cred.AWSSecretKey,
+                              region_name="us-east-2")
+    table = dynamodb.Table(iTovenUserTable)
+    username = username.lower()
+
+    response = table.query(
+        IndexName='Username_Index',
+        KeyConditionExpression=Key('Username').eq(username))["Items"][0]["Username"]
+    print(f"Found User!: {response}")
+    if "@" and "." in response:
+        return True
+    else:
         return False
 
+
+print(user_exists("arthurlee087@gmail.com"))
 
 def daily_pro_account_checkup():
     starter = time.time()
